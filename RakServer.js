@@ -6,7 +6,7 @@ const RakMessages = require('./RakMessages.js');
 const BitStream = require('./BitStream.js');
 const {ReliabilityLayer, Reliability} = require('./ReliabilityLayer.js');
 const data = require('dgram');
-const MessageHandler = require('../Handles/MessageHandler.js');
+const MessageHandler = require('./MessageHandler.js');
 
 
 class RakServer {
