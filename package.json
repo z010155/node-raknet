@@ -1,0 +1,22 @@
+{
+  "name": "node-raknet",
+  "version": "1.0.0",
+  "description": "A raknet library for node",
+  "main": "RakServer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RaineBannister/node-raknet.git"
+  },
+  "keywords": [
+    "raknet"
+  ],
+  "author": "Raine Bannister",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RaineBannister/node-raknet/issues"
+  },
+  "homepage": "https://github.com/RaineBannister/node-raknet#readme"
+}
