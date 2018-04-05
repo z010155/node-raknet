@@ -473,15 +473,15 @@ class BitStream {
 
     /**
      * Reads a string from the stream
+     * @param {Number} [size]
      * @returns {string}
      */
-    readString() {
+    readString(size) {
+        if(size === undefined) size = 33;
         let text = "";
-        let temp = this.readByte();
-        while(temp !== 0) {
-            temp = String.fromCharCode(temp);
-            text += temp;
-            temp = this.readByte();
+
+        for(let i = 0; i < size; i++) {
+            text += String.fromCharCode(this.readByte());
         }
         return text;
     }
