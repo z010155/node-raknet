@@ -69,6 +69,7 @@ class RakServer {
             }
             catch(e) {
                 console.warn("Something went wrong while handling packet! " + e.message);
+                console.trace();
             }
         });
 
