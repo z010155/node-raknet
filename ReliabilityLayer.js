@@ -245,7 +245,7 @@ class ReliabilityLayer {
             let index = this.sendMessageNumberIndex;
             this.sendMessageNumberIndex++;
 
-            this.sendMessage(packet.packet, index, packet.reliability, undefined, undefined);
+            this.sendMessage(packet.packet, index, packet.reliability, packet.orderingIndex, undefined);
         }
 
         if(!this.acks.isEmpty()) {
