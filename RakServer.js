@@ -6,10 +6,11 @@ const RakMessages = require('./RakMessages.js');
 const BitStream = require('./BitStream.js');
 const {ReliabilityLayer, Reliability} = require('./ReliabilityLayer.js');
 const data = require('dgram');
+const EventEmitter = require('events');
 const MessageHandler = require('./MessageHandler.js');
 
 
-class RakServer {
+class RakServer extends EventEmitter {
     /**
      *
      * @param {String} ip
@@ -17,6 +18,11 @@ class RakServer {
      * @param {String} password
      */
     constructor(ip, port, password) {
+        /**
+         *
+         */
+        super();
+
         /**
          * The IP of this server
          * @type {String}
@@ -47,12 +53,6 @@ class RakServer {
         this.server = data.createSocket('udp4');
 
         /**
-         *
-         * @type {Array<MessageHandler>}
-         */
-        this.handles = [];
-
-        /**
          * The start time of the server
          * @type {number}
          */
@@ -68,7 +68,7 @@ class RakServer {
                 this.onMessage(data, senderInfo)
             }
             catch(e) {
-                console.warn("Something went wrong while handling packet! " + e.message);
+                console.warn(`Something went wrong while handling packet! ${e.message}`);
                 console.warn(e.stack);
             }
         });
@@ -114,7 +114,7 @@ class RakServer {
                     }
                 }
             } else {
-                console.warn("Got message from unconnected user!");
+                console.warn(`Got message from unconnected user!`);
             }
         }
     }
@@ -126,22 +126,10 @@ class RakServer {
      */
     onPacket(packet, senderInfo) {
         let type = packet.readByte();
-        let handled = false;
-
-        for(let i = 0; i < this.handles.length; i++) {
-            /**
-             *
-             * @type {MessageHandler}
-             */
-            let handle = this.handles[i].create();
-            if(handle.type === type) {
-                handle.handle(this, packet, senderInfo);
-                handled = true;
-            }
-        }
-
-        if(!handled) {
-            console.log("Unhandled packet. ID: " + RakMessages.key(type) + " (" + type + ")");
+        if(this.listenerCount(type) > 0) {
+            this.emit(type, packet, senderInfo);
+        } else {
+            console.log(`No listeners found for ID: ${RakMessages.key(type)} (${type})`);
         }
     }
 
