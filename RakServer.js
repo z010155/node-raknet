@@ -7,7 +7,6 @@ const BitStream = require('./BitStream.js');
 const {ReliabilityLayer, Reliability} = require('./ReliabilityLayer.js');
 const data = require('dgram');
 const EventEmitter = require('events');
-const MessageHandler = require('./MessageHandler.js');
 
 
 class RakServer extends EventEmitter {
