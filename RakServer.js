@@ -125,8 +125,8 @@ class RakServer extends EventEmitter {
      */
     onPacket(packet, senderInfo) {
         let type = packet.readByte();
-        if(this.listenerCount(type) > 0) {
-            this.emit(type, packet, senderInfo);
+        if(this.listenerCount(String(type)) > 0) {
+            this.emit(String(type), packet, senderInfo);
         } else {
             console.log(`No listeners found for ID: ${RakMessages.key(type)} (${type})`);
         }
