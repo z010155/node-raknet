@@ -13,7 +13,7 @@ class BitStream {
         else {
             this.data = Buffer.alloc(0);
         }
-        this._byteCount = this.data.toString().length;
+        this._byteCount = this.data.length;
         //for reading data
         this._rBytePos = 0;
         this._rBitPos = 7;
@@ -640,7 +640,34 @@ class BitStream {
      * Returns the Hex representation of this BitStream
      */
     toHexString() {
+        let output = "";
+        let temp = [
+            '0',
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            'A',
+            'B',
+            'C',
+            'D',
+            'E',
+            'F'
+        ];
 
+        for(let i = 0; i < this._byteCount; i ++) {
+            let byte = this.data.readUInt8(i);
+            let partone = (byte & 0xF0) >> 4;
+            let parttwo = byte & 0x0F;
+
+            output += temp[partone] + temp[parttwo] + ' ';
+        }
+        return output;
     }
 }
 
