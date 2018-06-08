@@ -266,6 +266,26 @@ class BitStream {
     }
 
     /**
+     * Writes a boolean to the stream
+     * @param {Boolean} n
+     */
+    writeBoolean(n) {
+        if(n === true) {
+            this.writeByte(1);
+        } else {
+            this.writeByte(0);
+        }
+    }
+
+    /**
+     * Reads a boolean from the stream
+     * @returns {boolean}
+     */
+    readBoolean() {
+        return this.readByte() === true;
+    }
+
+    /**
      * Writes a character to the stream
      * @param {Number} n Character to write
      */
