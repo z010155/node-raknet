@@ -402,6 +402,44 @@ class BitStream {
     }
 
     /**
+     * Reads a float from the stream
+     * @returns {Number}
+     */
+    readFloat() {
+        let mantissa = this.readShort();
+        let exponent = this.readBit();
+        mantissa += (this.readBits(7) << 16);
+        let sign = this.readBit();
+        if(sign) {
+            sign = -1;
+        } else {
+            sign = 1;
+        }
+        exponent += (this.readBits(7) << 1);
+        exponent -= 127;
+
+        return Math.pow(2, exponent) * (mantissa * 1.1920928955078125e-7 + 1) * sign;
+    }
+
+    /**
+     * Writes a float to the stream
+     * @param {Number} n
+     */
+    writeFloat(n) {
+        let sign = (n < 0);
+        let exponent = Math.floor(Math.log2(Math.abs(n)));
+        let mantissa = Math.floor(((Math.abs(n) / Math.pow(2, exponent)) - 1) / 1.1920928955078125e-7);
+        exponent += 127;
+
+        this.writeByte(mantissa & 0xff);
+        this.writeByte((mantissa & 0xff00) >> 8);
+        this.writeBit((exponent & 0x01) === 1);
+        this.writeBits((mantissa & 0x7f0000) >> 16, 7);
+        this.writeBit(sign);
+        this.writeBits((exponent & 0xfe) >> 1, 7);
+    }
+
+    /**
      * Writes a BitStream to this BitStream
      * @param {BitStream} bs
      */
