@@ -82,7 +82,6 @@ class ReliabilityLayer {
                 let beta = 0.25;
                 this.rttVar = (1 - beta) * this.rttVar + beta * Math.abs(this.srrt - rtt);
                 this.srrt = (1 - alpha) * this.srrt + alpha * rtt;
-                1
             }
             this.rto = Math.max(1, this.srrt + 4 * this.rttVar);
 

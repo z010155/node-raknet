@@ -84,6 +84,8 @@ class BitStream {
             this.data = Buffer.alloc(this._wBytePos + 1);
             this._byteCount = this._wBytePos + 1;
 
+            old.copy(this.data);
+
             for(let i = 0; i < this._wBytePos; i ++) {
                 this.data.writeUInt8(old.readUInt8(i), i); //copy over into new Buffer
             }
@@ -134,11 +136,7 @@ class BitStream {
     writeBits(n, b) {
         for(let i = b; i > 0; i --) {
             let temp = (n >> (i - 1)) & 0x01;
-            if(temp === 1) {
-                this.writeBit(true);
-            } else {
-                this.writeBit(false);
-            }
+            this.writeBit(temp === 1);
         }
     }
 
@@ -229,11 +227,7 @@ class BitStream {
         //we have to build an array of true and false... or we can just left shift it and do it that way
         for(let i = 0; i < 8; i++) {
             let t = (n & 0x80) >>> 7; //get the leftmost bit and put it on the right
-
-            if(t === 1) // we have a true...
-                this.writeBit(true);
-            else
-                this.writeBit(false);
+            this.writeBit(t === 1);
             n <<= 1; //move to next bit...
             n &= 0xFF; //ensure we are only looking at a byte...
         }
@@ -394,11 +388,12 @@ class BitStream {
 
     /**
      * Writes an unsigned long long to the stream
-     * @param {Number} n The number to write
+     * @param {Number} top The top of the number
+     * @param {Number} bottom The bottom of the number
      */
-    writeLongLong(n) {
-        this.writeLong(n & 0xffffffff);
-        this.writeLong((n & 0xffffffff00000000) >>> 32);
+    writeLongLong(top, bottom) {
+        this.writeLong(bottom);
+        this.writeLong(top);
     }
 
     /**
@@ -428,7 +423,7 @@ class BitStream {
     writeFloat(n) {
         let sign = (n < 0);
         let exponent = Math.floor(Math.log2(Math.abs(n)));
-        let mantissa = Math.floor(((Math.abs(n) / Math.pow(2, exponent)) - 1) / 1.1920928955078125e-7);
+        let mantissa = Math.ceil(((Math.abs(n) / Math.pow(2, exponent)) - 1) / 1.1920928955078125e-7); // 1.1920928955078125e-7 = 2^-23
         exponent += 127;
 
         this.writeByte(mantissa & 0xff);

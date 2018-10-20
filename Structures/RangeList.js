@@ -156,7 +156,7 @@ class Range {
      */
     toArray() {
         let ret = [];
-        for(let i = this.min; i < max; i++) {
+        for(let i = this.min; i <= this.max; i++) {
             ret.push(i);
         }
         return ret;
@@ -190,4 +190,4 @@ class Range {
     }
 }
 
-module.exports = RangeList;
+module.exports = {RangeList, Range};
