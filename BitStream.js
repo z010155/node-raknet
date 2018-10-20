@@ -86,10 +86,6 @@ class BitStream {
 
             old.copy(this.data);
 
-            for(let i = 0; i < this._wBytePos; i ++) {
-                this.data.writeUInt8(old.readUInt8(i), i); //copy over into new Buffer
-            }
-
             this.data.writeUInt8(0, this._wBytePos);
 
         }
